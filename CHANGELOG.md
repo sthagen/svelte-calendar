@@ -2,6 +2,92 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.5"></a>
+## [1.3.5](https://github.com/6eDesign/svelte-calendar/compare/v1.3.4...v1.3.5) (2020-02-14)
+
+
+### Bug Fixes
+
+* use |local modifier for transitions so that they don't play out on navigation ([#67](https://github.com/6eDesign/svelte-calendar/issues/67)) ([8242299](https://github.com/6eDesign/svelte-calendar/commit/8242299))
+
+
+
+<a name="1.3.4"></a>
+## [1.3.4](https://github.com/6eDesign/svelte-calendar/compare/v1.3.3...v1.3.4) (2020-01-26)
+
+
+
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/6eDesign/svelte-calendar/compare/v1.3.2...v1.3.3) (2020-01-26)
+
+
+### Bug Fixes
+
+* linting issue ([4ed23e2](https://github.com/6eDesign/svelte-calendar/commit/4ed23e2))
+
+
+
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/6eDesign/svelte-calendar/compare/v1.3.1...v1.3.2) (2020-01-26)
+
+
+### Bug Fixes
+
+* eslint fixes ([d6df6ac](https://github.com/6eDesign/svelte-calendar/commit/d6df6ac))
+
+
+
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/6eDesign/svelte-calendar/compare/v1.3.0...v1.3.1) (2020-01-15)
+
+
+### Bug Fixes
+
+* ignore line for eslint (error suddenly popped up but only in travis [odd]) ([17c4be1](https://github.com/6eDesign/svelte-calendar/commit/17c4be1))
+
+
+
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/6eDesign/svelte-calendar/compare/v1.2.2...v1.3.0) (2020-01-15)
+
+
+### Bug Fixes
+
+* linting violations ([07c868f](https://github.com/6eDesign/svelte-calendar/commit/07c868f))
+
+
+### Features
+
+* allow styling of div which wraps the Datepicker component ([19d4b07](https://github.com/6eDesign/svelte-calendar/commit/19d4b07))
+
+
+
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/6eDesign/svelte-calendar/compare/v1.2.1...v1.2.2) (2019-12-19)
+
+
+### Bug Fixes
+
+* linting issues ([8816456](https://github.com/6eDesign/svelte-calendar/commit/8816456))
+
+
+
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/6eDesign/svelte-calendar/compare/v1.2.0...v1.2.1) (2019-11-23)
+
+
+
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/6eDesign/svelte-calendar/compare/v1.1.0...v1.2.0) (2019-11-15)
+
+
+### Features
+
+* Internationalization (add daysOfWeek and monthsOfYear props) ([a290701](https://github.com/6eDesign/svelte-calendar/commit/a290701))
+* Internationalization (add daysOfWeek and monthsOfYear props) ([20c6d5a](https://github.com/6eDesign/svelte-calendar/commit/20c6d5a))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/6eDesign/svelte-calendar/compare/v1.0.11...v1.1.0) (2019-10-19)
 

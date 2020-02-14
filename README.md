@@ -19,6 +19,9 @@ prop name            | type                   | default
 `dateChosen`         | `boolean`              | `false`
 `selectableCallback` | `function`             | `null`
 `format`             | `string` \| `function` | `'#{m}/#{d}/#{Y}'`
+`daysOfWeek`         | `array`                | En-US Locale (see below)
+`monthsOfYear`       | `array`                | En-US Locale (see below)
+`style`              | `string`               | ""
 
 ### `start` and `end`
 These properties set the minimum and maximum dates that will be rendered by this calendar.  It is **highly** recommended that you do not leave these as their defaults and supply values which suit your application's needs.
@@ -35,8 +38,66 @@ Provide a function which accepts a date and returns a boolean determining whethe
 ### `format`
 Date formatting uses [`timeUtils`] formatting (MM/DD/YYYY by default).  If you would like to use a different formatting library, supply a function which accepts a date and returns a string. 
 
+### `daysOfWeek` and `monthsOfYear`
+These two props are used to internationalize the calendar.  The default values are: 
+
+```javascript
+export let daysOfWeek = [
+  ['Sunday', 'Sun'],
+  ['Monday', 'Mon'],
+  ['Tuesday', 'Tue'],
+  ['Wednesday', 'Wed'],
+  ['Thursday', 'Thu'],
+  ['Friday', 'Fri'],
+  ['Saturday', 'Sat']
+];
+export let monthsOfYear = [
+  ['January', 'Jan'],
+  ['February', 'Feb'],
+  ['March', 'Mar'],
+  ['April', 'Apr'],
+  ['May', 'May'],
+  ['June', 'Jun'],
+  ['July', 'Jul'],
+  ['August', 'Aug'],
+  ['September', 'Sep'],
+  ['October', 'Oct'],
+  ['November', 'Nov'],
+  ['December', 'Dec']
+];
+```
+
+### `style`
+This prop allows you to style the div which wraps the Datepicker component.  This can be useful, for instance, if you'd like to do something like make the component full-width or `display: block;` (by default the element is `inline-block`).  If you would like to style the button that triggers the opening of the datepicker we recommend you pass a custom element (button/link/etc) to the component via its default slot.
+
 ### Kitchen Sink Example:
 ```html
+<script>
+  const daysOfWeek = [
+    [ 'Domingo', 'Dom' ],
+    [ 'Lunes', 'Lun' ],
+    [ 'Martes', 'Mar' ],
+    [ 'Miércoles', 'Mié' ],
+    [ 'Jueves', 'Jue' ],
+    [ 'Viernes', 'Vie' ],
+    [ 'Sábado', 'Sáb' ],
+  ];
+  const monthsOfYear = [
+    [ 'Enero', 'Ene' ],
+    [ 'Febrero', 'Feb' ],
+    [ 'Marzo', 'Mar' ],
+    [ 'Abril', 'Abr' ],
+    [ 'Mayo', 'May' ],
+    [ 'Junio', 'Jun' ],
+    [ 'Julio', 'Jul' ],
+    [ 'Agosto', 'Ago' ],
+    [ 'Septiembre', 'Sep' ],
+    [ 'Octubre', 'Oct' ],
+    [ 'Noviembre', 'Nov' ],
+    [ 'Diciembre', 'Dic' ],
+  ];
+</script>
+
 <Datepicker
   bind:formattedSelected={selectedDateFormatted}
   bind:selected={selectedDate}
@@ -44,6 +105,8 @@ Date formatting uses [`timeUtils`] formatting (MM/DD/YYYY by default).  If you w
   start={threeDaysInPast}
   end={inThirtyDays}
   selectableCallback={filterWeekends}
+  daysOfWeek={daysOfWeek}
+  monthsOfYear={monthsOfYear}
   format={date => dayjs(date).format('DD/MM/YYYY')}
 />
 ```

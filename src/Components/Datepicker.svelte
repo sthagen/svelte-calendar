@@ -2,9 +2,8 @@
   import Month from './Month.svelte';
   import NavBar from './NavBar.svelte';
   import Popover from './Popover.svelte';
-  import { dayDict } from './lib/dictionaries';
-  import { getMonths, areDatesEquivalent } from './lib/helpers';
-  import { formatDate } from 'timeUtils';
+  import { getMonths } from './lib/helpers';
+  import { formatDate, internationalize } from 'timeUtils';
   import { keyCodes, keyCodesArray } from './lib/keyCodes';
   import { onMount, createEventDispatcher } from 'svelte';
 
@@ -20,6 +19,49 @@
   export let dateChosen = false;
   export let trigger = null;
   export let selectableCallback = null;
+  export let weekStart = 0;
+  export let daysOfWeek = [
+    ['Sunday', 'Sun'],
+    ['Monday', 'Mon'],
+    ['Tuesday', 'Tue'],
+    ['Wednesday', 'Wed'],
+    ['Thursday', 'Thu'],
+    ['Friday', 'Fri'],
+    ['Saturday', 'Sat']
+  ];
+  export let monthsOfYear = [
+    ['January', 'Jan'],
+    ['February', 'Feb'],
+    ['March', 'Mar'],
+    ['April', 'Apr'],
+    ['May', 'May'],
+    ['June', 'Jun'],
+    ['July', 'Jul'],
+    ['August', 'Aug'],
+    ['September', 'Sep'],
+    ['October', 'Oct'],
+    ['November', 'Nov'],
+    ['December', 'Dec']
+  ];
+
+  export let style = '';
+  
+  // theming variables:
+  export let buttonBackgroundColor = '#fff';
+  export let buttonBorderColor = '#eee';
+  export let buttonTextColor = '#333';
+  export let highlightColor = '#f7901e';
+  export let dayBackgroundColor = 'none';
+  export let dayTextColor = '#4a4a4a';
+  export let dayHighlightedBackgroundColor = '#efefef';
+  export let dayHighlightedTextColor = '#4a4a4a';
+
+  internationalize({ daysOfWeek, monthsOfYear });
+  let sortedDaysOfWeek = weekStart === 0 ? daysOfWeek : (() => {
+    let dow = daysOfWeek.slice();
+    dow.push(dow.shift());
+    return dow;
+  })();
 
   let highlighted = today;
   let shouldShakeDate = false;
@@ -37,7 +79,7 @@
     trigger.innerHTML = formatted;
   }
 
-  $: months = getMonths(start, end, selectableCallback);
+  $: months = getMonths(start, end, selectableCallback, weekStart);
 
   let monthIndex = 0;
   $: {
@@ -55,6 +97,17 @@
   $: firstVisibleDate = visibleMonth.weeks[0].days[0].date;
   $: canIncrementMonth = monthIndex < months.length - 1;
   $: canDecrementMonth = monthIndex > 0;
+  $: wrapperStyle = `
+    --button-background-color: ${buttonBackgroundColor};
+    --button-border-color: ${buttonBorderColor};
+    --button-text-color: ${buttonTextColor};
+    --highlight-color: ${highlightColor};
+    --day-background-color: ${dayBackgroundColor};
+    --day-text-color: ${dayTextColor};
+    --day-highlighted-background-color: ${dayHighlightedBackgroundColor};
+    --day-highlighted-text-color: ${dayHighlightedTextColor};
+    ${style}
+  `;
 
   export let formattedSelected;
   $: {
@@ -70,49 +123,58 @@
 
   function changeMonth(selectedMonth) {
     month = selectedMonth;
+    highlighted = new Date(year, month, 1);
   }
 
-  function incrementMonth(direction, date) {
+  function incrementMonth(direction, day = 1) {
     if (direction === 1 && !canIncrementMonth) return;
     if (direction === -1 && !canDecrementMonth) return;
     let current = new Date(year, month, 1);
     current.setMonth(current.getMonth() + direction);
     month = current.getMonth();
     year = current.getFullYear();
-    highlighted = new Date(year, month, date || 1);
+    highlighted = new Date(year, month, day);
   }
 
   function getDefaultHighlighted() {
     return new Date(selected);
   }
 
-  function incrementDayHighlighted(amount) {
-    highlighted = new Date(highlighted);
-    highlighted.setDate(highlighted.getDate() + amount);
-    if (amount > 0 && highlighted > lastVisibleDate) {
-      return incrementMonth(1, highlighted.getDate());
-    }
-    if (amount < 0 && highlighted < firstVisibleDate) {
-      return incrementMonth(-1, highlighted.getDate());
-    }
-    return highlighted;
-  }
-
-  function getDay(m, date) {
-    for (let i = 0; i < m.weeks.length; i += 1) {
-      for (let j = 0; j < m.weeks[i].days.length; j += 1) {
-        if (areDatesEquivalent(m.weeks[i].days[j].date, date)) {
-          return m.weeks[i].days[j];
-        }
+  const getDay = (m, d, y) => {
+    let theMonth = months.find(aMonth => aMonth.month === m && aMonth.year === y);
+    if (!theMonth) return null;
+    // eslint-disable-next-line
+    for (let i = 0; i < theMonth.weeks.length; ++i) {
+      // eslint-disable-next-line
+      for (let j = 0; j < theMonth.weeks[i].days.length; ++j) {
+        let aDay = theMonth.weeks[i].days[j];
+        if (aDay.month === m && aDay.day === d && aDay.year === y) return aDay;
       }
     }
     return null;
+  };
+
+  function incrementDayHighlighted(amount) {
+    let proposedDate = new Date(highlighted);
+    proposedDate.setDate(highlighted.getDate() + amount);
+    let correspondingDayObj = getDay(
+      proposedDate.getMonth(),
+      proposedDate.getDate(),
+      proposedDate.getFullYear()
+    );
+    if (!correspondingDayObj || !correspondingDayObj.isInRange) return;
+    highlighted = proposedDate;
+    if (amount > 0 && highlighted > lastVisibleDate) {
+      incrementMonth(1, highlighted.getDate());
+    }
+    if (amount < 0 && highlighted < firstVisibleDate) {
+      incrementMonth(-1, highlighted.getDate());
+    }
   }
 
   function checkIfVisibleDateIsSelectable(date) {
-    const day = getDay(visibleMonth, date);
-    if (!day) return false;
-    return day.selectable;
+    const proposedDay = getDay(date.getMonth(), date.getDate(), date.getFullYear());
+    return proposedDay && proposedDay.selectable;
   }
 
   function shakeDate(date) {
@@ -189,31 +251,13 @@
     dispatch('open');
   }
 
-  // theming variables:
-  export let buttonBackgroundColor = '#fff';
-  export let buttonBorderColor = '#eee';
-  export let buttonTextColor = '#333';
-  export let highlightColor = '#f7901e';
-  export let dayBackgroundColor = 'none';
-  export let dayTextColor = '#4a4a4a';
-  export let dayHighlightedBackgroundColor = '#efefef';
-  export let dayHighlightedTextColor = '#4a4a4a';
 </script>
 
 <div 
   class="datepicker" 
   class:open="{isOpen}" 
   class:closing="{isClosing}"
-  style='
-    --button-background-color: {buttonBackgroundColor};
-    --button-border-color: {buttonBorderColor};
-    --button-text-color: {buttonTextColor};
-    --highlight-color: {highlightColor};
-    --day-background-color: {dayBackgroundColor};
-    --day-text-color: {dayTextColor};
-    --day-highlighted-background-color: {dayHighlightedBackgroundColor};
-    --day-highlighted-text-color: {dayHighlightedTextColor};
-  '
+  style={wrapperStyle}
 >
   <Popover
     bind:this="{popover}"
@@ -234,16 +278,30 @@
     </div>
     <div slot="contents">
       <div class="calendar">
-        <NavBar {month} {year} {start} {end} {canIncrementMonth}
-        {canDecrementMonth} on:monthSelected={e => changeMonth(e.detail)}
-        on:incrementMonth={e => incrementMonth(e.detail)} />
+        <NavBar 
+          {month}
+          {year}
+          {canIncrementMonth}
+          {canDecrementMonth}
+          {start}
+          {end}
+          {monthsOfYear}
+          on:monthSelected={e => changeMonth(e.detail)}
+          on:incrementMonth={e => incrementMonth(e.detail)} 
+        />
         <div class="legend">
-          {#each dayDict as day}
-          <span>{day.abbrev}</span>
+          {#each sortedDaysOfWeek as day}
+          <span>{day[1]}</span>
           {/each}
         </div>
-        <Month {visibleMonth} {selected} {highlighted} {shouldShakeDate} {start}
-        {end} id={visibleMonthId} on:dateSelected={e => registerSelection(e.detail)} />
+        <Month 
+          {visibleMonth}
+          {selected}
+          {highlighted}
+          {shouldShakeDate}
+          id={visibleMonthId}
+          on:dateSelected={e => registerSelection(e.detail)} 
+        />
       </div>
     </div>
   </Popover>

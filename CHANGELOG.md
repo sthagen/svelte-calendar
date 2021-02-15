@@ -1,3 +1,61 @@
+## [2.0.4](https://github.com/6eDesign/svelte-calendar/compare/v2.0.3...v2.0.4) (2020-12-22)
+
+
+### Bug Fixes
+
+* gh-pages & snowpack issues ([2e79a69](https://github.com/6eDesign/svelte-calendar/commit/2e79a69a9d308e35fcec2f17c691fa8a81eaccbd))
+
+## [2.0.3](https://github.com/6eDesign/svelte-calendar/compare/v2.0.2...v2.0.3) (2020-12-22)
+
+
+### Bug Fixes
+
+* gh-pages generation ([a2f3e08](https://github.com/6eDesign/svelte-calendar/commit/a2f3e08af029849fa51875ec91b9caed7b7bc6c3))
+
+## [2.0.2](https://github.com/6eDesign/svelte-calendar/compare/v2.0.1...v2.0.2) (2020-12-22)
+
+
+### Bug Fixes
+
+* update gh-pages title ([a736fe0](https://github.com/6eDesign/svelte-calendar/commit/a736fe0d7c91533d225dd2a81bc0365e7c2b5fed))
+
+## [2.0.1](https://github.com/6eDesign/svelte-calendar/compare/v2.0.0...v2.0.1) (2020-12-22)
+
+
+### Bug Fixes
+
+* update gh-pages title ([0f2479c](https://github.com/6eDesign/svelte-calendar/commit/0f2479c0b080579d89161e03d8d4cbd625b79d57))
+* update snowpack base url for gh pages ([44a47ab](https://github.com/6eDesign/svelte-calendar/commit/44a47ab2c2aabd6725e76b9daad899b2ca48cb3c))
+
+# [2.0.0](https://github.com/6eDesign/svelte-calendar/compare/v1.5.0...v2.0.0) (2020-12-22)
+
+
+### Bug Fixes
+
+* add [@semantic-release](https://github.com/semantic-release) plugins ([f93d866](https://github.com/6eDesign/svelte-calendar/commit/f93d866e5d56c891c9ea7ba6a5bee7fdbfc7a3a7))
+
+
+* breaking change: add snowpack build process, github actions, and fix for default start/end dates (#103) ([40346a4](https://github.com/6eDesign/svelte-calendar/commit/40346a4b9e7e308d13a36cd7a205bcadabc1fc35)), closes [#103](https://github.com/6eDesign/svelte-calendar/issues/103)
+
+
+### BREAKING CHANGES
+
+* update default start/end dates & new build process
+
+* feat: CI workflow
+
+* fix: CI workflow update
+
+* fix: remove package-lock from gitignore
+
+* fix: remove .travis.yml
+
+* fix: add github pages to release.yml workflow
+
+* fix: update readme
+
+Co-authored-by: Jonathan Greenemeier <jonathan.greenemeier31@t-mobile.com>
+
 # Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
